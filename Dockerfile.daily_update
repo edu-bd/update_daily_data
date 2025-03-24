@@ -21,6 +21,6 @@ ENV PYTHONPATH=/app
 RUN apt-get update && apt-get install -y cron
 
 # 创建crontab文件
-RUN echo "0 1 * * * cd /app && python daily_update.py >> /app/logs/cron.log 2>&1" > /etc/cron.d/daily-update-cron
+RUN echo "0 23 * * * cd /app && python daily_update.py >> /app/logs/cron.log 2>&1" > /etc/cron.d/daily-update-cron
 RUN chmod 0644 /etc/cron.d/daily-update-cron
 RUN crontab /etc/cron.d/daily-update-cron 
