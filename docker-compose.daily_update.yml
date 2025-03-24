@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  daily-update:
+    build:
+      context: .
+      dockerfile: Dockerfile.daily_update
+    container_name: stock-daily-update
+    volumes:
+      - ./logs:/app/logs
+      - ../data:/app/data
+    environment:
+      - TZ=Asia/Shanghai
+    restart: unless-stopped
+    networks:
+      - stock-network
+
+networks:
+  stock-network:
+    external: true 
