@@ -2,16 +2,23 @@ version: '3.8'
 
 services:
   daily-update:
-    image: data-daily-update:latest
+    image: stock-daily-update:latest
     build:
       context: .
       dockerfile: Dockerfile.daily_update
-    container_name: data-daily-update
+    container_name: stock-daily-update
     volumes:
-      - ./logs:/app/logs
+      - ./logs:/app/logs:rw
       - ../data:/app/data
     environment:
       - TZ=Asia/Shanghai
+      - PATH=/usr/local/bin:${PATH}
+      - DB_HOST=host.docker.internal
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=stock_data
     restart: unless-stopped
-    command: >
-      sh -c "mkdir -p /app/logs && touch /app/logs/cron.log && cron && tail -f /app/logs/cron.log" 
+    user: root
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
